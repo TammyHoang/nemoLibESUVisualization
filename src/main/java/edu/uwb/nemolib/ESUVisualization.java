@@ -63,13 +63,15 @@ public class ESUVisualization extends JFrame {
             CompactHashSet.Iter i = children.iterator();
             while (i.hasNext()) {
                 int curr = Math.abs(i.next());
+                String vertex = key.toString();
                 // Getting the key (node) from the key-value HashMap
                 Stream<String> keyStream = keys(graph.getNameToIndexMap(), curr);
                 Integer child = Integer.valueOf(keyStream.findFirst().get());
                 // Check if the child is greater than the parent
                 if (child > Integer.valueOf(key.toString())) {
-                    g.addVertex(key.toString() + "," + child.toString());
-                    g.addEdge(key.toString(), key.toString() + "," + child.toString());
+                    vertex += "," + child.toString();
+                    g.addVertex(vertex);
+                    g.addEdge(key.toString(), vertex);
                     System.out.println("\tLvl2Child=" + child);
                     // Find the children's children
                     AdjacencyList nextLvlChildren = new AdjacencyList();
@@ -104,10 +106,13 @@ public class ESUVisualization extends JFrame {
                     }
                     System.out.println("\t\t" + nextLvlChildren);
                     // Create the vertices and edges of the 3rd level children
-//                    CompactHashSet.Iter childrenIter = nextLvlChildren.iterator();
-//                    while (childrenIter.hasNext()) {
-//                        
-//                    }
+                    CompactHashSet.Iter childrenIter = nextLvlChildren.iterator();
+                    while (childrenIter.hasNext()) {
+                        child = childrenIter.next();
+                        String cVertex = vertex + "," + child.toString();
+                            g.addVertex(cVertex);
+                            g.addEdge(vertex, cVertex);
+                    }
                 }
             }
         }
