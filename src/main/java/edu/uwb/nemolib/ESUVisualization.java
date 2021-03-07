@@ -57,24 +57,63 @@ public class ESUVisualization extends JFrame {
             g.addVertex(key.toString());
             g.addEdge("root", key.toString());
 
-            // Gotta figure out the number of levels to print
-            System.out.println("Lvl1Child: " + Integer.valueOf(key.toString()));
+            System.out.println("Lvl1Parent: " + Integer.valueOf(key.toString()));
             AdjacencyList children = graph.getAdjacencyList((Integer) graph.getNameToIndexMap().get(key));
+            // Iterating through each vertices' children
             CompactHashSet.Iter i = children.iterator();
             while (i.hasNext()) {
-                Stream<String> keyStream = keys(graph.getNameToIndexMap(), Math.abs(i.next()));
+                int curr = Math.abs(i.next());
+                // Getting the key (node) from the key-value HashMap
+                Stream<String> keyStream = keys(graph.getNameToIndexMap(), curr);
                 Integer child = Integer.valueOf(keyStream.findFirst().get());
+                // Check if the child is greater than the parent
                 if (child > Integer.valueOf(key.toString())) {
                     g.addVertex(key.toString() + "," + child.toString());
                     g.addEdge(key.toString(), key.toString() + "," + child.toString());
-                    System.out.println("\tChild=" + child);
+                    System.out.println("\tLvl2Child=" + child);
+                    // Find the children's children
+                    AdjacencyList nextLvlChildren = new AdjacencyList();
+                    // Get the siblings
+                    AdjacencyList siblings = graph.getAdjacencyList((Integer) graph.getNameToIndexMap().get(key));
+                    CompactHashSet.Iter siblingsIter = siblings.iterator();
+                    while (siblingsIter.hasNext()) {
+                        int si = Math.abs(siblingsIter.next());
+                        // Get the key (node) from the key-value HashMap
+                        keyStream = keys(graph.getNameToIndexMap(), si);
+                        Integer sibling = Integer.valueOf(keyStream.findFirst().get());
+                        // Check if the sibling is greater than the current node
+                        if (sibling > child) {
+                            nextLvlChildren.add(sibling);
+                        }
+                    }
+                    // Get the object from the key-value HashMap
+                    Stream<Object> keyStream1 = keys(graph.getNameToIndexMap(), curr);
+                    Object key1 = keyStream1.findFirst().get();
+                    // Get the adjacency list's iterator of the current object
+                    CompactHashSet.Iter iNextLvlChildren = graph.getAdjacencyList(
+                            (Integer) graph.getNameToIndexMap().get(key1)).iterator();
+                    while (iNextLvlChildren.hasNext()) {
+                        int nextLevelChild = Math.abs(iNextLvlChildren.next());
+                        // Get the key (node) from the key-value HashMap
+                        keyStream = keys(graph.getNameToIndexMap(), nextLevelChild);
+                        child = Integer.valueOf(keyStream.findFirst().get());
+                        // Check if the child is greater than the parent node and the siblings don't already contain the next level's child
+                        if (child > Integer.valueOf(key.toString()) && !siblings.contains(nextLevelChild)) {
+                            nextLvlChildren.add(child);
+                        }
+                    }
+                    System.out.println("\t\t" + nextLvlChildren);
+                    // Create the vertices and edges of the 3rd level children
+                    CompactHashSet.Iter childrenIter = nextLvlChildren.iterator();
+                    while (childrenIter.hasNext()) {
+                        
+                    }
                 }
             }
         }
 
         // positioning via jgraphx layouts
         mxHierarchicalLayout layout = new mxHierarchicalLayout(jgxAdapter);
-
         layout.execute(jgxAdapter.getDefaultParent());
     }
 
