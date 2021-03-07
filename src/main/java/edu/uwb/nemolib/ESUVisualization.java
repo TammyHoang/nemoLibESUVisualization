@@ -104,10 +104,10 @@ public class ESUVisualization extends JFrame {
                     }
                     System.out.println("\t\t" + nextLvlChildren);
                     // Create the vertices and edges of the 3rd level children
-                    CompactHashSet.Iter childrenIter = nextLvlChildren.iterator();
-                    while (childrenIter.hasNext()) {
-                        
-                    }
+//                    CompactHashSet.Iter childrenIter = nextLvlChildren.iterator();
+//                    while (childrenIter.hasNext()) {
+//                        
+//                    }
                 }
             }
         }
