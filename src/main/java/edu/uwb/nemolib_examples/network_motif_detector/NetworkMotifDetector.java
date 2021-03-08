@@ -1,6 +1,7 @@
 package edu.uwb.nemolib_examples.network_motif_detector;
 
 import edu.uwb.nemolib.*;
+import java.awt.*;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -12,64 +13,6 @@ import java.awt.event.*;
 import javax.swing.filechooser.*;
 
 public class NetworkMotifDetector {
-
-//	public static void main (String[] args) {
-//
-//		if (args.length < 3) {
-//			System.err.println("usage: NetworkMotifDetector path_to_data " +
-//					"motif_size, random_graph_count");
-//			System.exit(1);
-//		}
-//
-//		String filename = args[0];
-//		System.out.println("filename = " + args[0]);
-//		int motifSize = Integer.parseInt(args[1]);
-//		int randGraphCount = Integer.parseInt(args[2]);
-//
-//		if (motifSize < 3) {
-//			System.err.println("Motif getSize must be 3 or larger");
-//			System.exit(-1);
-//		}
-//
-//		// Hard-code probs for now. This vector will take about ~10% sample
-//		List<Double> probs = new LinkedList<>();
-//		for (int i = 0; i < motifSize - 2; i++)
-//		{
-//			probs.add(1.0);
-//		}
-//		probs.add(1.0);
-//		probs.add(0.1);
-//
-//		// parse input graph
-//		System.out.println("Parsing target graph...");
-//		Graph targetGraph = null;
-//		try {
-//			targetGraph = GraphParser.parse(filename);
-//		} catch (IOException e) {
-//			System.err.println("Could not process " + filename);
-//			System.err.println(e);
-//			System.exit(-1);
-//		}
-//
-//		SubgraphEnumerationResult subgraphCount = new SubgraphCount();
-//		SubgraphEnumerator targetGraphESU = new ESU();
-//		TargetGraphAnalyzer targetGraphAnalyzer =
-//				new TargetGraphAnalyzer(targetGraphESU, subgraphCount);
-//		Map<String, Double> targetLabelToRelativeFrequency =
-//				targetGraphAnalyzer.analyze(targetGraph, motifSize);
-//
-//		SubgraphEnumerator randESU = new RandESU(probs);
-//		RandomGraphAnalyzer randomGraphAnalyzer =
-//				new RandomGraphAnalyzer(randESU, randGraphCount);
-//		Map<String, List<Double>> randomLabelToRelativeFrequencies =
-//				randomGraphAnalyzer.analyze(targetGraph, motifSize);
-//
-//		RelativeFrequencyAnalyzer relativeFrequencyAnalyzer =
-//				new RelativeFrequencyAnalyzer(randomLabelToRelativeFrequencies,
-//						                      targetLabelToRelativeFrequency);
-//		System.out.println(relativeFrequencyAnalyzer);
-//
-//		System.out.println("Compete");
     
     private static final double P_THRESH = 0.1;
     private static final int RAND_GRAPH_COUNT = 1000;
@@ -79,6 +22,7 @@ public class NetworkMotifDetector {
     
     // Variables for user input GUI
     private static JLabel lblFile;
+    private static JLabel lblPrompt;
     private static JButton btnOpen;
     private static JButton btnSubmit;
     private static JTextField txtMotifSize;
@@ -88,7 +32,8 @@ public class NetworkMotifDetector {
         
         addComponents();
         addEventHandlers();
-
+//        // The commented section below is the original NemoLib code, uncomment
+//        // to access the functionalities as needed.
 //        String filename = args[0];
 //        System.out.println("filename = " + args[0]);
 //        int motifSize = Integer.parseInt(args[1]);
@@ -341,35 +286,27 @@ public class NetworkMotifDetector {
 //
 //        System.out.println("NemoCollection Compete");
 //        //33333333333333333333333333333333333333333////
-//        
-//        ESUVisualization view = new ESUVisualization("JGraphT Adapter to JGraphX Demo", targetGraph, motifSize);
-//
-//        view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        view.setSize(500, 500);
-//        view.setLocation(1000, 500);
-//        view.setVisible(true);
     }
     
     // Allows the user to choose a file from a local directory
     public static void addComponents() {
         // File chooser component
         // Reference: https://www.geeksforgeeks.org/java-swing-jfilechooser/
-        JFrame frameFile = new JFrame("File Chooser");
-        frameFile.setSize(300, 300);
-        frameFile.setLocation(500, 100);
-        frameFile.setVisible(true);
-        frameFile.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        btnOpen = new JButton("Open");
+        JFrame frameFile = new JFrame("ESU Algorithm Visualization");
+        
         JPanel pnlFile = new JPanel();
+        lblPrompt = new JLabel("Select a graph text file.");
+        pnlFile.add(lblPrompt);
+        btnOpen = new JButton("Open");
         pnlFile.add(btnOpen);
         lblFile = new JLabel("No file selected");
         pnlFile.add(lblFile);
-        frameFile.add(pnlFile);
+        frameFile.add(pnlFile, BorderLayout.NORTH);
         lblFile.setText("");
 
         // Input motif size component
         txtMotifSize = new JTextField(6);
-        lblMotifSize = new JLabel("Enter a motif size (motif size must be 3 or larger):");
+        lblMotifSize = new JLabel("Enter an integer motif size (motif size must be 3 or larger):");
 
         // Submit button
         btnSubmit = new JButton("Submit");
@@ -380,7 +317,12 @@ public class NetworkMotifDetector {
         pnlMotifSize.add(txtMotifSize);
         pnlMotifSize.add(btnSubmit);
 
-        frameFile.add(pnlMotifSize);
+        frameFile.add(pnlMotifSize, BorderLayout.CENTER);
+        
+        frameFile.setSize(700, 300);
+        frameFile.setLocation(400, 100);
+        frameFile.setVisible(true);
+        frameFile.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
     }
     
@@ -448,8 +390,8 @@ public class NetworkMotifDetector {
                 ESUVisualization view = new ESUVisualization("ESU Algorithm Visualization", targetGraph, motifSize);
 
                 view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                view.setSize(500, 500);
-                view.setLocation(1000, 500);
+                view.setSize(1000, 500);
+                view.setLocation(100, 100);
                 view.setVisible(true);
             }
 

@@ -12,7 +12,7 @@
             <properties>
                 <exec.args>-classpath %classpath edu.uwb.nemolib_examples.network_motif_detector.NetworkMotifDetector graph.txt 4 10 1</exec.args>
                 <exec.executable>java</exec.executable>
-                <exec.workingdir>/Users/jessica/Desktop/CSS483Project/nemoLibESUVisualization</exec.workingdir>
+                <exec.workingdir>/Users/tammyhoang/Desktop/CSS483/NemoLib-Java-V2-Testing-master</exec.workingdir>
             </properties>
         </action>
         <action>
@@ -28,7 +28,7 @@
                 <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath edu.uwb.nemolib_examples.network_motif_detector.NetworkMotifDetector graph.txt 4 10 1</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
-                <exec.workingdir>/Users/jessica/Desktop/CSS483Project/nemoLibESUVisualization</exec.workingdir>
+                <exec.workingdir>/Users/tammyhoang/Desktop/CSS483/NemoLib-Java-V2-Testing-master</exec.workingdir>
             </properties>
         </action>
         <action>
@@ -43,7 +43,7 @@
             <properties>
                 <exec.args>-classpath %classpath edu.uwb.nemolib_examples.network_motif_detector.NetworkMotifDetector graph.txt 4 10 1</exec.args>
                 <exec.executable>java</exec.executable>
-                <exec.workingdir>/Users/jessica/Desktop/CSS483Project/nemoLibESUVisualization</exec.workingdir>
+                <exec.workingdir>/Users/tammyhoang/Desktop/CSS483/NemoLib-Java-V2-Testing-master</exec.workingdir>
             </properties>
         </action>
     </actions>
