@@ -50,12 +50,12 @@ public class ESUVisualization extends JFrame {
         mxGraphComponent component = new mxGraphComponent(jgxAdapter);
         getContentPane().add(component);
 
-        g.addVertex("root");
+        g.addVertex("Root");
 
         // Adding all of the vertices to the ESU visualization graph/tree
         for (Object key : graph.getNameToIndexMap().keySet()) {
             g.addVertex(key.toString());
-            g.addEdge("root", key.toString());
+            g.addEdge("Root", key.toString());
 
             System.out.println("Lvl1Parent: " + Integer.valueOf(key.toString()));
             AdjacencyList children = graph.getAdjacencyList((Integer) graph.getNameToIndexMap().get(key));
