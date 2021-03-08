@@ -342,7 +342,6 @@ public class NetworkMotifDetector {
 //        System.out.println("NemoCollection Compete");
 //        //33333333333333333333333333333333333333333////
 //        
-//        //Tammy Stuff
 //        ESUVisualization view = new ESUVisualization("JGraphT Adapter to JGraphX Demo", targetGraph, motifSize);
 //
 //        view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -370,14 +369,15 @@ public class NetworkMotifDetector {
 
         // Input motif size component
         txtMotifSize = new JTextField(6);
-        lblMotifSize = new JLabel("Select a number between 3-8");
+        lblMotifSize = new JLabel("Enter a motif size (motif size must be 3 or larger):");
 
         // Submit button
         btnSubmit = new JButton("Submit");
         
         JPanel pnlMotifSize = new JPanel();
-        pnlMotifSize.add(txtMotifSize);
+        
         pnlMotifSize.add(lblMotifSize);
+        pnlMotifSize.add(txtMotifSize);
         pnlMotifSize.add(btnSubmit);
 
         frameFile.add(pnlMotifSize);
@@ -422,12 +422,12 @@ public class NetworkMotifDetector {
                     return;
                 }
                 
-                // Ensures that the motif size is between 3 and 8
-                if (motifSize < 3 || motifSize > 8) {
+                // Ensures that the motif size is at least 3
+                if (motifSize < 3) {
                     return;
                 }
                 
-                lblMotifSize.setText("Motif size: " + txtMotifSize.getText());
+                lblMotifSize.setText("Enter a motif size (motif size must be 3 or larger):");
                 String filename = inputFileName;
                 System.out.println("filename = " + inputFileName);
                 int randGraphCount = 100;
@@ -445,7 +445,7 @@ public class NetworkMotifDetector {
                     System.exit(-1);
                 }
 
-                ESUVisualization view = new ESUVisualization("JGraphT Adapter to JGraphX Demo", targetGraph, motifSize);
+                ESUVisualization view = new ESUVisualization("ESU Algorithm Visualization", targetGraph, motifSize);
 
                 view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 view.setSize(500, 500);
