@@ -1,6 +1,5 @@
 package edu.uwb.nemolib;
 
-import com.mxgraph.layout.*;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.swing.*;
 import org.jgrapht.*;
@@ -8,7 +7,6 @@ import org.jgrapht.ext.*;
 import org.jgrapht.graph.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -19,7 +17,6 @@ import java.util.stream.Stream;
 public class ESUVisualization extends JFrame {
 
     private JGraphXAdapter<String, DefaultEdge> jgxAdapter;
-    private Graph targetGraph;
     private int levels;
 
     /**
@@ -31,7 +28,6 @@ public class ESUVisualization extends JFrame {
      */
     public ESUVisualization(String title, Graph graph, int motifSize) {
         super(title);
-        targetGraph = graph;
         levels = motifSize;
         addComponents(graph);
     }
@@ -63,6 +59,9 @@ public class ESUVisualization extends JFrame {
             CompactHashSet.Iter i = children.iterator();
             while (i.hasNext()) {
                 int curr = Math.abs(i.next());
+                AdjacencyList path = new AdjacencyList();
+                path.add((Integer) graph.getNameToIndexMap().get(key));
+                path.add(curr);
                 String vertex = key.toString();
                 // Getting the key (node) from the key-value HashMap
                 Stream<String> keyStream = keys(graph.getNameToIndexMap(), curr);
@@ -79,13 +78,13 @@ public class ESUVisualization extends JFrame {
                     AdjacencyList siblings = graph.getAdjacencyList((Integer) graph.getNameToIndexMap().get(key));
                     CompactHashSet.Iter siblingsIter = siblings.iterator();
                     while (siblingsIter.hasNext()) {
-                        int si = Math.abs(siblingsIter.next());
+                        int sIter = Math.abs(siblingsIter.next());
                         // Get the key (node) from the key-value HashMap
-                        keyStream = keys(graph.getNameToIndexMap(), si);
+                        keyStream = keys(graph.getNameToIndexMap(), sIter);
                         Integer sibling = Integer.valueOf(keyStream.findFirst().get());
                         // Check if the sibling is greater than the current node
                         if (sibling > child) {
-                            nextLvlChildren.add(sibling);
+                            nextLvlChildren.add(sIter);
                         }
                     }
                     // Get the object from the key-value HashMap
@@ -101,17 +100,22 @@ public class ESUVisualization extends JFrame {
                         child = Integer.valueOf(keyStream.findFirst().get());
                         // Check if the child is greater than the parent node and the siblings don't already contain the next level's child
                         if (child > Integer.valueOf(key.toString()) && !siblings.contains(nextLevelChild)) {
-                            nextLvlChildren.add(child);
+                            nextLvlChildren.add(nextLevelChild);
                         }
                     }
-                    System.out.println("\t\t" + nextLvlChildren);
                     // Create the vertices and edges of the 3rd level children
                     CompactHashSet.Iter childrenIter = nextLvlChildren.iterator();
                     while (childrenIter.hasNext()) {
-                        child = childrenIter.next();
+                        int nextChild = Math.abs(childrenIter.next());
+                        AdjacencyList currPath = path.copy();
+                        currPath.add(nextChild);
+                        // Get the key (node) from the key-value HashMap
+                        keyStream = keys(graph.getNameToIndexMap(), nextChild);
+                        child = Integer.valueOf(keyStream.findFirst().get());
                         String cVertex = vertex + "," + child.toString();
-                            g.addVertex(cVertex);
-                            g.addEdge(vertex, cVertex);
+                        g.addVertex(cVertex);
+                        g.addEdge(vertex, cVertex);
+                        System.out.println("\t\tLvl3Child=" + child.toString());
                     }
                 }
             }
@@ -129,4 +133,4 @@ public class ESUVisualization extends JFrame {
                 .filter(entry -> value.equals(entry.getValue()))
                 .map(Map.Entry::getKey);
     }
-}
+            }
