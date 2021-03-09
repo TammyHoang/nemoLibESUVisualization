@@ -1,37 +1,26 @@
 package edu.uwb.nemolib_examples.network_motif_detector;
 
 import edu.uwb.nemolib.*;
-import java.awt.*;
 
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
-import javax.swing.*;
-import java.awt.event.*;
-import javax.swing.filechooser.*;
 
 public class NetworkMotifDetector {
     
     private static final double P_THRESH = 0.1;
     private static final int RAND_GRAPH_COUNT = 1000;
-    
-    private static Integer motifSize;
-    private static String inputFileName;
-    
-    // Variables for user input GUI
-    private static JLabel lblFile;
-    private static JLabel lblPrompt;
-    private static JButton btnOpen;
-    private static JButton btnSubmit;
-    private static JTextField txtMotifSize;
-    private static JLabel lblMotifSize;
 
     public static void main(String[] args) {
         
-        addComponents();
-        addEventHandlers();
+        ESUVisualization view = new ESUVisualization("ESU Algorithm Visualization");
+        view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        view.setSize(1000, 500);
+        view.setLocation(100, 100);
+        view.setVisible(true);
+        
 //        // The commented section below is the original NemoLib code, uncomment
 //        // to access the functionalities as needed.
 //        String filename = args[0];
@@ -286,115 +275,5 @@ public class NetworkMotifDetector {
 //
 //        System.out.println("NemoCollection Compete");
 //        //33333333333333333333333333333333333333333////
-    }
-    
-    // Allows the user to choose a file from a local directory
-    public static void addComponents() {
-        // File chooser component
-        // Reference: https://www.geeksforgeeks.org/java-swing-jfilechooser/
-        JFrame frameFile = new JFrame("ESU Algorithm Visualization");
-        
-        JPanel pnlFile = new JPanel();
-        lblPrompt = new JLabel("Select a graph text file.");
-        pnlFile.add(lblPrompt);
-        btnOpen = new JButton("Open");
-        pnlFile.add(btnOpen);
-        lblFile = new JLabel("No file selected");
-        pnlFile.add(lblFile);
-        frameFile.add(pnlFile, BorderLayout.NORTH);
-        lblFile.setText("");
-
-        // Input motif size component
-        txtMotifSize = new JTextField(6);
-        lblMotifSize = new JLabel("Enter an integer motif size (motif size must be 3 or larger):");
-
-        // Submit button
-        btnSubmit = new JButton("Submit");
-        
-        JPanel pnlMotifSize = new JPanel();
-        
-        pnlMotifSize.add(lblMotifSize);
-        pnlMotifSize.add(txtMotifSize);
-        pnlMotifSize.add(btnSubmit);
-
-        frameFile.add(pnlMotifSize, BorderLayout.CENTER);
-        
-        frameFile.setSize(700, 300);
-        frameFile.setLocation(400, 100);
-        frameFile.setVisible(true);
-        frameFile.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-    }
-    
-    // Controls the event of when the "Open" and "Submit" buttons are clicked
-    private static void addEventHandlers() {
-        // Open button
-        btnOpen.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser file = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-                int r = file.showOpenDialog(null);
-                if (r == JFileChooser.APPROVE_OPTION) {
-                    inputFileName = file.getSelectedFile().getAbsolutePath();
-                    lblFile.setText(inputFileName);
-                } else {
-                    lblFile.setText("User cancelled operation");
-                }
-            }
-        });
-        
-        // Submit button
-        // After submitting, the ESU algorithm executes to display the graph
-        btnSubmit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                String motifSizeInput = txtMotifSize.getText();
-                txtMotifSize.setText("");
-                
-                // Returns if the input file does not exist
-                if (inputFileName == null) {
-                    return;
-                }
-
-                // Check if the user input is an integer
-                try {
-                    motifSize = Integer.valueOf(motifSizeInput); 
-                } catch (NumberFormatException ex) {
-                    return;
-                }
-                
-                // Ensures that the motif size is at least 3
-                if (motifSize < 3) {
-                    return;
-                }
-                
-                lblMotifSize.setText("Enter a motif size (motif size must be 3 or larger):");
-                String filename = inputFileName;
-                System.out.println("filename = " + inputFileName);
-                int randGraphCount = 100;
-                boolean directed = false;
-
-                // Parse input graph
-                System.out.println("Parsing target graph...");
-                Graph targetGraph = null;
-
-                try {
-                    targetGraph = GraphParser.parse(filename, directed);
-                } catch (IOException ex) {
-                    System.err.println("Could not process " + filename);
-                    System.err.println(ex);
-                    System.exit(-1);
-                }
-
-                ESUVisualization view = new ESUVisualization("ESU Algorithm Visualization", targetGraph, motifSize);
-
-                view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                view.setSize(1000, 500);
-                view.setLocation(100, 100);
-                view.setVisible(true);
-            }
-
-        });
     }
 }
