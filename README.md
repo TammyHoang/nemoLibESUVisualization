@@ -7,7 +7,7 @@ The ESU algorithm visualization tool visualizes the ESU algorithm to find subgra
 
 Prerequisites
 -------------
-* A macOS operating environment due to the nauty27r1 labelg program in the project, which is compatible for macOS
+* A macOS operating environment due to the nauty27r1 labelg program in the project, which is compatible with macOS
 * JDK version 8 or higher
 * [Maven](https://maven.apache.org/) version 3.0 or higher
 * Netbeans IDE
