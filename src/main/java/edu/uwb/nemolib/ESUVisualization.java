@@ -24,7 +24,7 @@ public class ESUVisualization extends JFrame {
     private JGraphXAdapter<String, DefaultEdge> jgxAdapter;
     private static Integer motifSize;
     private static String inputFileName;
-    
+
     // Variables for user input GUI
     private static JLabel lblFile;
     private static JLabel lblPrompt;
@@ -62,9 +62,9 @@ public class ESUVisualization extends JFrame {
 
         // Submit button
         btnSubmit = new JButton("Submit");
-        
+
         JPanel pnlMotifSize = new JPanel();
-        
+
         pnlMotifSize.add(lblMotifSize);
         pnlMotifSize.add(txtMotifSize);
         pnlMotifSize.add(btnSubmit);
@@ -73,7 +73,7 @@ public class ESUVisualization extends JFrame {
         pnlNorth.setLayout(new BoxLayout(pnlNorth, BoxLayout.Y_AXIS));
         pnlNorth.add(pnlFile);
         pnlNorth.add(pnlMotifSize);
-        
+
         getContentPane().add(pnlNorth, BorderLayout.NORTH);
         addEventHandlers();
     }
@@ -94,16 +94,16 @@ public class ESUVisualization extends JFrame {
                 }
             }
         });
-        
+
         // Submit button
         // After submitting, the ESU algorithm executes to display the graph
         btnSubmit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+
                 String motifSizeInput = txtMotifSize.getText();
                 txtMotifSize.setText("");
-                
+
                 // Returns if the input file does not exist
                 if (inputFileName == null) {
                     return;
@@ -111,16 +111,16 @@ public class ESUVisualization extends JFrame {
 
                 // Check if the user input is an integer
                 try {
-                    motifSize = Integer.valueOf(motifSizeInput); 
+                    motifSize = Integer.valueOf(motifSizeInput);
                 } catch (NumberFormatException ex) {
                     return;
                 }
-                
+
                 // Ensures that the motif size is at least 3
                 if (motifSize < 3) {
                     return;
                 }
-                
+
                 lblMotifSize.setText("Enter a motif size (motif size must be 3 or larger):");
                 String filename = inputFileName;
                 System.out.println("filename = " + inputFileName);
@@ -142,8 +142,8 @@ public class ESUVisualization extends JFrame {
             }
         });
     }
-    
-    private void addESUTree(Graph graph, Integer motifSize){
+
+    private void addESUTree(Graph graph, Integer motifSize) {
         // create a JGraphT graph
         ListenableGraph<String, DefaultEdge> g
                 = new DefaultListenableGraph<>(new SimpleGraph<>(DefaultEdge.class));
@@ -152,6 +152,7 @@ public class ESUVisualization extends JFrame {
         jgxAdapter = new JGraphXAdapter<>(g);
 
         mxGraphComponent component = new mxGraphComponent(jgxAdapter);
+        component.getGraph().setAllowDanglingEdges(false);
         getContentPane().add(component, BorderLayout.CENTER);
 
         g.addVertex("Root");
@@ -159,11 +160,11 @@ public class ESUVisualization extends JFrame {
         // Adding all of the vertices to the ESU visualization graph/tree
         for (Object key : graph.getNameToIndexMap().keySet()) {
             g.addVertex(key.toString());
-            g.addEdge("Root", key.toString());
+            g.addEdge("Root", key.toString(), new RelationshipEdge());
 
             System.out.println("Lvl1Parent: " + Integer.valueOf(key.toString()));
             AdjacencyList children = graph.getAdjacencyList((Integer) graph.getNameToIndexMap().get(key));
-            
+
             // Iterating through each vertices' children
             CompactHashSet.Iter i = children.iterator();
             while (i.hasNext()) {
@@ -172,18 +173,18 @@ public class ESUVisualization extends JFrame {
                 path.add((Integer) graph.getNameToIndexMap().get(key));
                 path.add(curr);
                 String vertex = key.toString();
-                
+
                 // Getting the key (node) from the key-value HashMap
                 Stream<String> keyStream = keys(graph.getNameToIndexMap(), curr);
                 Integer child = Integer.valueOf(keyStream.findFirst().get());
-                
+
                 // Check if the child is greater than the parent
                 if (child > Integer.valueOf(key.toString())) {
                     vertex += "," + child.toString();
                     g.addVertex(vertex);
-                    g.addEdge(key.toString(), vertex);
+                    g.addEdge(key.toString(), vertex, new RelationshipEdge());
                     System.out.println("\tLvl2Child=" + child);
-                    
+
                     // Find the children's children
                     AdjacencyList nextLvlChildren = new AdjacencyList();
                     // Get the siblings
@@ -194,7 +195,7 @@ public class ESUVisualization extends JFrame {
                         // Get the key (node) from the key-value HashMap
                         keyStream = keys(graph.getNameToIndexMap(), sIter);
                         Integer sibling = Integer.valueOf(keyStream.findFirst().get());
-                        
+
                         // Check if the sibling is greater than the current node
                         if (sibling > child) {
                             nextLvlChildren.add(sIter);
@@ -203,7 +204,7 @@ public class ESUVisualization extends JFrame {
                     // Get the object from the key-value HashMap
                     Stream<Object> keyStream1 = keys(graph.getNameToIndexMap(), curr);
                     Object key1 = keyStream1.findFirst().get();
-                    
+
                     // Get the adjacency list's iterator of the current object
                     CompactHashSet.Iter iNextLvlChildren = graph.getAdjacencyList(
                             (Integer) graph.getNameToIndexMap().get(key1)).iterator();
@@ -212,7 +213,7 @@ public class ESUVisualization extends JFrame {
                         // Get the key (node) from the key-value HashMap
                         keyStream = keys(graph.getNameToIndexMap(), nextLevelChild);
                         child = Integer.valueOf(keyStream.findFirst().get());
-                        
+
                         // Check if the child is greater than the parent node and the siblings don't already contain the next level's child
                         if (child > Integer.valueOf(key.toString()) && !siblings.contains(nextLevelChild)) {
                             nextLvlChildren.add(nextLevelChild);
@@ -224,13 +225,13 @@ public class ESUVisualization extends JFrame {
                         int nextChild = Math.abs(childrenIter.next());
                         AdjacencyList currPath = path.copy();
                         currPath.add(nextChild);
-                        
+
                         // Get the key (node) from the key-value HashMap
                         keyStream = keys(graph.getNameToIndexMap(), nextChild);
                         child = Integer.valueOf(keyStream.findFirst().get());
                         String cVertex = vertex + "," + child.toString();
                         g.addVertex(cVertex);
-                        g.addEdge(vertex, cVertex);
+                        g.addEdge(vertex, cVertex, new RelationshipEdge());
                         System.out.println("\t\tLvl3Child=" + child.toString());
                     }
                 }
@@ -241,7 +242,7 @@ public class ESUVisualization extends JFrame {
         mxHierarchicalLayout layout = new mxHierarchicalLayout(jgxAdapter);
         layout.execute(jgxAdapter.getDefaultParent());
     }
-    
+
     public <K, V> Stream<K> keys(Map<K, V> map, V value) {
         return map
                 .entrySet()
@@ -249,5 +250,19 @@ public class ESUVisualization extends JFrame {
                 .filter(entry -> value.equals(entry.getValue()))
                 .map(Map.Entry::getKey);
     }
-    
+
+    class RelationshipEdge extends DefaultEdge {
+
+        /**
+         * Constructs a relationship edge
+         *
+         */
+        public RelationshipEdge() {
+        }
+
+        @Override
+        public String toString() {
+            return "";
+        }
+    }
 }
