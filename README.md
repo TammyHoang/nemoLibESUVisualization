@@ -3,7 +3,7 @@ nemoLib ESU Visualization
 
 Description
 -----------
-The ESU algorithm visualization tool visualizes the ESU algorithm to find subgraphs. Starting from the root node, the tool searches the undirected graph text file inputted by the user to create a GUI for a visualized tree for the subgraphs of a specific size network. Currently, the tool supports a motif size of three. The tool uses the nemoLib library Java version as a reference to implement the ESU algorithm and to parse the input graph text file.
+The ESU algorithm visualization tool visualizes the ESU algorithm to find subgraphs. Starting from the root node, the tool uses the undirected graph text file inputted by the user to create a GUI for a visualized tree for the subgraphs of a specific size network. Currently, the tool supports a motif size of three. The tool uses the nemoLib library Java version as a reference to implement the ESU algorithm and to parse the input graph text file.
 
 Prerequisites
 -------------
@@ -28,7 +28,7 @@ Installation and Use
 
 Example Testing File
 ---------------
-An example graph input text file can be found in the project, labelled graph.txt.
+An example graph input text file can be found in the project, labelled `graph.txt`.
 
 Documentation
 -------------
