@@ -9,7 +9,7 @@ Prerequisites
 -------------
 * A macOS operating environment due to the nauty27r1 labelg program in the project, which is compatible with macOS
 * JDK version 8 or higher
-* [Maven](https://maven.apache.org/) version 3.0 or higher Use the `mvn package` command from the root directory to generate a jar file in the `target` subdirectory containing the nemolib library. Any classes which implement nemolib should use the statement `import edu.uwb.nemolib;`.
+* [Maven](https://maven.apache.org/) version 3.0 or higher. Use the `mvn package` command from the root directory to generate a jar file in the `target` subdirectory containing the nemolib library. Any classes which implement nemolib should use the statement `import edu.uwb.nemolib;`.
 * Netbeans IDE
 
 Installation and Use
@@ -18,6 +18,9 @@ Installation and Use
 * Unzip the zip file
 * Open the `nbactions.xml` file to change the path of the `<exec.workingdir>` to the current location of the program (there are three sections of the `<exec.workingdir>`)
   * If the path of the `<exec.workingdir>` is at the incorrect location, there will be errors with Maven.
+* In the terminal, cd to the path of the current location of the program
+  * cd .../nemoLibESUVisualization-master
+  * mvn package
 * Open the project using the Netbeans IDE
 * Clean and build the program
 * Run the program in the NetworkMotifDetector.java class since it contains the main driver function
