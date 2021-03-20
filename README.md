@@ -9,7 +9,7 @@ Prerequisites
 -------------
 * A macOS operating environment due to the nauty27r1 labelg program in the project, which is compatible with macOS
 * JDK version 8 or higher
-* [Maven](https://maven.apache.org/) version 3.0 or higher
+* [Maven](https://maven.apache.org/) version 3.0 or higher Use the `mvn package` command from the root directory to generate a jar file in the `target` subdirectory containing the nemolib library. Any classes which implement nemolib should use the statement `import edu.uwb.nemolib;`.
 * Netbeans IDE
 
 Installation and Use
