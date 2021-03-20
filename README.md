@@ -23,7 +23,7 @@ Installation and Use
   * `mvn package`
 * Open the project using the Netbeans IDE
 * Clean and build the program
-* Run the program in the NetworkMotifDetector.java class since it contains the main driver function
+* Run the program in the `NetworkMotifDetector.java` class since it contains the main driver function
 * The GUI is displayed, showing the options to select a graph text file and a motif size
 * Select a graph text file
 * Input a motif size greater than or equal to three (the tool currently supports a motif size of three)
